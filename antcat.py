@@ -4,76 +4,78 @@ from selenium.webdriver.support.ui import WebDriverWait
 import selenium.webdriver.support.expected_conditions as EC
 import time
 import random
-from selenium.webdriver.common.keys import Keys
+from locators_catalog import LocatorsCatalog as loc
 
 
-browser = webdriver.Chrome()
-browser.maximize_window()
-browser.get("https://antcar.ru/")
-wait = WebDriverWait(browser, 10)
+class Base:
+    browser = webdriver.Chrome()
+    browser.maximize_window()
+    browser.get("https://antcar.ru/")
+    wait = WebDriverWait(browser, 10)
 
-catalog = wait.until(
-    EC.presence_of_all_elements_located((By.CLASS_NAME, "rounded-xl"))
-)[8].click()
+    catalog = wait.until(
+        EC.presence_of_all_elements_located((loc.catalog_loc))
+    )[8].click()
 
 
-brand_car = wait.until(EC.presence_of_element_located((By.ID, "car-brand"))).click()
-brand_list = wait.until(
-    EC.presence_of_all_elements_located(
-        (By.CSS_SELECTOR, "[data-testid='select-option']")
+    brand_car = wait.until(EC.presence_of_element_located((loc.brand_car_loc))).click()
+    brand_list = wait.until(
+        EC.presence_of_all_elements_located(
+            (loc.brand_list_loc)
+        )
     )
-)
-chosen_brand = random.choice(brand_list).click()
+    chosen_brand = random.choice(brand_list).click()
 
 
-model_car = wait.until(EC.presence_of_element_located((By.ID, "car-model"))).click()
-model_list = wait.until(
-    EC.presence_of_all_elements_located(
-        (By.CSS_SELECTOR, "[data-testid='rc-select-item-option']")
+    model_car = wait.until(EC.presence_of_element_located((loc.model_car_loc))).click()
+    model_list = wait.until(
+        EC.presence_of_all_elements_located(
+            (loc.model_list_loc)
+        )
     )
-)
-chosen_model = random.choice(model_list).click()
+    chosen_model = random.choice(model_list).click()
 
-car_location = browser.find_element(By.ID, "car-location").click()
-time.sleep(0.5)
-location_list = wait.until(
-    EC.presence_of_all_elements_located(
-        (By.CSS_SELECTOR, "[data-testid='rc-select-item-option']")
+    car_location = browser.find_element(loc.car_location_loc).click()
+    time.sleep(0.5)
+    location_list = wait.until(
+        EC.presence_of_all_elements_located(
+            (loc.location_list_loc)
+        )
     )
-)
-chosen_location = random.choice(location_list).click()
-time.sleep(1)
+    chosen_location = random.choice(location_list).click()
+    time.sleep(1)
 
-car_price_from = browser.find_element(By.ID, "car-price-from").click()
-car_price_list = wait.until(
-    EC.presence_of_all_elements_located(
-        (By.CSS_SELECTOR, "[data-testid='select-option']")
+    car_price_from = browser.find_element(loc.car_price_from_loc).click()
+    car_price_list = wait.until(
+        EC.presence_of_all_elements_located(
+            (loc.car_price_list_loc)
+        )
     )
-)
-chosen_price_from = random.choice(car_price_list).click()
+    chosen_price_from = random.choice(car_price_list).click()
 
 
-car_price_to = browser.find_element(By.ID, "car-price-to").click()
-car_price_list = wait.until(
-    EC.presence_of_all_elements_located(
-        (By.CSS_SELECTOR, "[data-testid='select-option']")
+    car_price_to = browser.find_element(loc.car_price_to_loc).click()
+    car_price_list = wait.until(
+        EC.presence_of_all_elements_located(
+            (loc.car_price_list_loc)
+        )
     )
-)
-chosen_price_to = random.choice(car_price_list).click()
+    chosen_price_to = random.choice(car_price_list).click()
 
-time.sleep(0.5)
-car_years_from = browser.find_element(By.ID, "car-years-from").send_keys(1)
-car_years_to = browser.find_element(By.ID, "car-years-to").send_keys(10)
+    time.sleep(0.5)
+    car_years_from = browser.find_element(loc.car_years_from_loc).send_keys(1)
+    car_years_to = browser.find_element(loc.car_years_to_loc).send_keys(10)
 
-owners = browser.find_elements(By. CLASS_NAME, "py-3")[2].click()
-car_owners_from = wait.until(
-    EC.presence_of_element_located((By. ID, "car-owners-from"))
-).send_keys(1)
-car_owners_to = browser.find_element(By. ID, "car-owners-to").send_keys(10)
+    owners = browser.find_elements(loc.owners_loc)[2].click()
+    car_owners_from = wait.until(
+        EC.presence_of_element_located((loc.car_owners_from_loc))
+    ).send_keys(1)
+    car_owners_to = browser.find_element(loc.car_owners_to_loc).send_keys(10)
 
-car_mileage_from = browser.find_element(By. ID, "car-mileage-from").send_keys(1)
-car_mileage_to = browser.find_element(By. ID, "car-mileage-to").clear()
-car_mileage_to = browser.find_element(By. ID, "car-mileage-to").send_keys(100000000)
+    car_mileage_from = browser.find_element(loc.car_mileage_from_loc).send_keys(1)
+    car_mileage_to = browser.find_element((loc.car_mileage_to_loc)).clear()
+    car_mileage_to = browser.find_element(loc.car_mileage_to_loc).send_keys(100000000)
+
 
 
 
