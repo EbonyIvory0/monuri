@@ -2,8 +2,7 @@ from page_catalog import Base
 import pytest
 
 expected_url = "https://antcar.ru/catalog"
-
-
+@pytest.mark.smoke
 def test_01_page_catalog(browser):
     catalog = Base(browser)
     catalog.open_page()

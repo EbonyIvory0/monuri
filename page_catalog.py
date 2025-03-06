@@ -23,7 +23,7 @@ class Base:
     Зачем? Чтобы все методы класса могли использовать браузер и ожидания.
     """
 
-    def __init__(self, browser):    
+    def __init__(self, browser):
         self.browser = browser
         self.wait = WebDriverWait(browser, 10)
         self.action = ActionChains(browser)
@@ -42,8 +42,8 @@ class Base:
 
     def open_catalog_page(self):
         """Попадание на сайт каталога автомобилей с домашней страницы сайта
-            Если страница не открылась в течение 10 секунд, то ошибка"""
-        
+        Если страница не открылась в течение 10 секунд, то ошибка"""
+
         try:
             logger.info("Открытие страницы каталога")
             catalog_button = self.wait.until(
@@ -109,9 +109,7 @@ class Base:
         """Выбор случайной страны нахождения автомобиля"""
 
         try:
-            location_dropdown = self.wait.until(
-                EC.element_to_be_clickable(loc.LOCATION_LOCATOR)
-            ).click()
+            self.wait.until(EC.element_to_be_clickable(loc.LOCATION_LOCATOR)).click()
             location_list = self.wait.until(
                 EC.visibility_of_all_elements_located(loc.LOCATION_LIST_LOCATOR)
             )
@@ -156,24 +154,24 @@ class Base:
             self.browser.save_screenshot("error_price_selection.png")
             logger.error(f"Ошибка при выборе цены: {e}")
             raise
-        
+
     def choose_years_from_car(self, years_from):
         """Ввод возраста машины и очистка поля ввода"""
 
         try:
             years_from_field = self.wait.until(
-            EC.element_to_be_clickable(loc.YEARS_FROM_LOCATOR)
+                EC.element_to_be_clickable(loc.YEARS_FROM_LOCATOR)
             )
             years_from_field.send_keys(Keys.CONTROL + "a" + Keys.BACKSPACE)
             years_from_field.send_keys(years_from)
             logger.info("Возраст ОТ введен")
         except Exception as e:
             self.browser.save_screenshot("error_years_from_input.png")
-            logger.error(f'Ошибка при вводе возраста ОТ: {e}')
+            logger.error(f"Ошибка при вводе возраста ОТ: {e}")
             raise
 
     def choose_years_to_car(self, years_to):
-        """Ввод возраста машины и очистка поля ввода """
+        """Ввод возраста машины и очистка поля ввода"""
 
         try:
             years_to_field = self.wait.until(
@@ -187,4 +185,3 @@ class Base:
             self.browser.save_screenshot("error_years_to_input.png")
             logger.error(f"Ошибка при ввод возраста машины До: {e}")
             raise
-            
