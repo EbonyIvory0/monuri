@@ -4,13 +4,14 @@ import selenium.webdriver.support.expected_conditions as EC
 import time
 import random
 import logging
+from selenium.webdriver.common.keys import Keys
 from locators_catalog import LocatorsCatalog as loc
+from selenium.webdriver.common.action_chains import ActionChains
 
-
-"""Логирование (запись событий в консоль)"""
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+"""Логирование (запись событий в консоль)"""
 
 BASE_URL = "https://antcar.ru/"
 
@@ -25,6 +26,8 @@ class Base:
     def __init__(self, browser):    
         self.browser = browser
         self.wait = WebDriverWait(browser, 10)
+        self.action = ActionChains(browser)
+        self.time = time.sleep(2)
 
     def open_page(self):
         """Открытие домашней страницы, cтартовая точка для тестов."""
@@ -108,10 +111,9 @@ class Base:
         try:
             location_dropdown = self.wait.until(
                 EC.element_to_be_clickable(loc.LOCATION_LOCATOR)
-            )
-            location_dropdown.click()
+            ).click()
             location_list = self.wait.until(
-                EC.presence_of_all_elements_located(loc.LOCATION_LIST_LOCATOR)
+                EC.visibility_of_all_elements_located(loc.LOCATION_LIST_LOCATOR)
             )
             if not location_list:
                 raise ValueError("Список стран пуст")
@@ -154,3 +156,35 @@ class Base:
             self.browser.save_screenshot("error_price_selection.png")
             logger.error(f"Ошибка при выборе цены: {e}")
             raise
+        
+    def choose_years_from_car(self, years_from):
+        """Ввод возраста машины и очистка поля ввода"""
+
+        try:
+            years_from_field = self.wait.until(
+            EC.element_to_be_clickable(loc.YEARS_FROM_LOCATOR)
+            )
+            years_from_field.send_keys(Keys.CONTROL + "a" + Keys.BACKSPACE)
+            years_from_field.send_keys(years_from)
+            logger.info("Возраст ОТ введен")
+        except Exception as e:
+            self.browser.save_screenshot("error_years_from_input.png")
+            logger.error(f'Ошибка при вводе возраста ОТ: {e}')
+            raise
+
+    def choose_years_to_car(self, years_to):
+        """Ввод возраста машины и очистка поля ввода """
+
+        try:
+            years_to_field = self.wait.until(
+                EC.element_to_be_clickable(loc.YEARS_TO_LOCATOR)
+            )
+            years_to_field.send_keys(Keys.CONTROL + "a" + Keys.BACKSPACE)
+            years_to_field.send_keys(years_to)
+            logger.info("Возраст ДО введен")
+            time.sleep(2)
+        except Exception as e:
+            self.browser.save_screenshot("error_years_to_input.png")
+            logger.error(f"Ошибка при ввод возраста машины До: {e}")
+            raise
+            
